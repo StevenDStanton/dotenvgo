@@ -63,7 +63,6 @@ func saveFileContentToEnviroment(lines []string) {
 		if exists {
 			os.Setenv(key, value)
 		}
-
 	}
 }
 

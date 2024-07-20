@@ -50,3 +50,5 @@ However, I would encourage you to go write your own, its really easy!
 - [x] Ignore any line without a `=`
 - [x] Return Value as a Map
 - [x] Save to os.Getenv
+- [ ] Set up overload bool to prevent overwriting existing variables
+- [ ] Set up autoload
