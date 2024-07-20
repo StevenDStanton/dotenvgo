@@ -38,12 +38,12 @@ However, I would encourage you to go write your own, its really easy!
 
 ## Requirements
 
-- [ ] Accept optional parameter for path to .env
-- [ ] Search current directory or provided directory for .env
-- [ ] Read File into memory
-- [ ] Ignore anything after the # character
-- [ ] Ignore blank lines
-- [ ] Parse key-value pairs deliminated by `=`
+- [x] Accept optional parameter for path to .env
+- [x] Search current directory or provided directory for .env
+- [x] Read File into memory
+- [x] Ignore anything after the # character
+- [x] Ignore blank lines
+- [x] Parse key-value pairs deliminated by `=`
 - [ ] Trim any whitespace around the `=`
 - [ ] Values can be quoted or unquoted
 - [ ] Unquoted lines end at line break

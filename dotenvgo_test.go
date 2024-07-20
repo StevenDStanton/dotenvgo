@@ -105,7 +105,7 @@ func TestNormalizeLineEndings(t *testing.T) {
 
 func TestParseFileContentToMap(t *testing.T) {
 	vault := make(Vault)
-	content := []byte("KEY1  =value1\nKEY2=value2\n# This is a comment\nKEY3=value3 # with comment")
+	content := []byte("KEY1  =value1\nKEY2=value2\n# This is a comment\n\n\nKEY3=value3 # with comment")
 	vault.parseFileContentToMap(content)
 
 	expected := Vault{
