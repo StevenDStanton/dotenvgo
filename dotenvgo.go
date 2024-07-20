@@ -8,7 +8,7 @@ import (
 
 type Vault map[string]string
 
-func Load(params ...string) (Vault, error) {
+func Load(returnMap bool, params ...string) (Vault, error) {
 	vault := make(Vault)
 	filePath := parseFileLocation(params...)
 	content, err := fetchFile(filePath)
@@ -16,7 +16,9 @@ func Load(params ...string) (Vault, error) {
 		return vault, err
 	}
 
-	vault.parseFileContentToMap(content)
+	if returnMap {
+		vault.parseFileContentToMap(content)
+	}
 
 	return vault, nil
 }

@@ -122,7 +122,7 @@ func TestParseFileContentToMap(t *testing.T) {
 }
 
 func TestLoad(t *testing.T) {
-	result, err := Load("test/")
+	result, err := Load(true, "test/")
 
 	if err != nil {
 		t.Error("Unable to Load File")

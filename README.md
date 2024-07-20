@@ -21,8 +21,6 @@ as left-pad over in the npm ecosystem. Part of why I love go is that the standar
 powerful enough I can write nearly anything I want on my own without relying on external
 resources.
 
-I also wanted one using a map and not actual enviromental variables.
-
 ## How
 
 Well I have used .env files for a long time so I think I have the gist of them. Now I may miss
@@ -51,3 +49,5 @@ However, I would encourage you to go write your own, its really easy!
 - [ ] Multiline values must use double quotes
 - [x] Ignore any line without a `=`
 - [ ] Ensure UTF8 encoding
+- [x] Return Value as a Map
+- [ ] Save to os.Getenv
