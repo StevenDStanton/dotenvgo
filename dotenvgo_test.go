@@ -1,6 +1,7 @@
 package dotenvgo
 
 import (
+	"os"
 	"strings"
 	"testing"
 )
@@ -70,43 +71,52 @@ func FuzzParseFileLocation(f *testing.F) {
 }
 
 func TestFetchFile(t *testing.T) {
-	result, err := fetchFile("test/test.txt")
+	// Create a temporary file with known content
+	tmpFile, err := os.CreateTemp("", "testfile")
 	if err != nil {
-		t.Errorf("FetchFile Expected hello=world and recieved %v", err)
+		t.Fatalf("Failed to create temp file: %v", err)
 	}
-	if string(result) != "hello=world" {
-		t.Errorf("FetchFile Expected hello=world and recieved %s", result)
+	defer os.Remove(tmpFile.Name())
+
+	content := "hello=world"
+	if _, err := tmpFile.WriteString(content); err != nil {
+		t.Fatalf("Failed to write to temp file: %v", err)
+	}
+	tmpFile.Close()
+
+	result, err := fetchFile(tmpFile.Name())
+	if err != nil {
+		t.Errorf("Expected no error, got %v", err)
+	}
+	if string(result) != content {
+		t.Errorf("Expected %s, got %s", content, result)
 	}
 
-	_, err = fetchFile("test/tes.txt")
+	_, err = fetchFile("nonexistentfile.txt")
 	if err == nil {
-		t.Errorf("Expected Error but no error thrown")
+		t.Errorf("Expected error for nonexistent file, got nil")
 	}
 }
 
 func TestNormalizeLineEndings(t *testing.T) {
-	fileContent, err := fetchFile("test/line-end-test.txt")
+	content := []byte("line1\r\nline2\rline3\n")
+	expected := []string{"line1", "line2", "line3"}
 
-	if err != nil {
-		t.Errorf("FetchFile Expected hello=world and recieved %v", err)
+	normalized := normalizeLineEndings(content)
+	if len(normalized) != len(expected) {
+		t.Fatalf("Expected %d lines, got %d", len(expected), len(normalized))
 	}
 
-	if !strings.Contains(string(fileContent), "\r") {
-		t.Errorf("Unnormalized content should contain '\\r', but got %q", fileContent)
+	for i, line := range expected {
+		if normalized[i] != line {
+			t.Errorf("Expected line %d to be %q, got %q", i, line, normalized[i])
+		}
 	}
-
-	normalized := normalizeLineEndings(fileContent)
-
-	if strings.Contains(normalized, "\r") {
-		t.Errorf("Normalized content should not contain '\\r', but got %q", normalized)
-	}
-
 }
-
 func TestParseFileContentToMap(t *testing.T) {
 	vault := make(Vault)
-	content := []byte("KEY1  =value1\nKEY2=value2\n# This is a comment\n\n\nKEY3=value3 # with comment")
-	vault.parseFileContentToMap(content)
+	lines := []string{"KEY1=value1", "KEY2=value2", "# This is a comment", "", "", "KEY3=value3 # with comment"}
+	vault.parseFileContentToMap(lines)
 
 	expected := Vault{
 		"KEY1": "value1",
@@ -122,14 +132,37 @@ func TestParseFileContentToMap(t *testing.T) {
 }
 
 func TestLoad(t *testing.T) {
-	result, err := Load(true, "test/")
-
+	// Create a temporary directory
+	tmpDir, err := os.MkdirTemp("", "envdir")
 	if err != nil {
-		t.Error("Unable to Load File")
+		t.Fatalf("Failed to create temp directory: %v", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	// Create the .env file within the temporary directory
+	envFilePath := tmpDir + "/.env"
+	tmpFile, err := os.Create(envFilePath)
+	if err != nil {
+		t.Fatalf("Failed to create temp file: %v", err)
+	}
+
+	content := "KEY1=value1\nKEY2=value2"
+	if _, err := tmpFile.WriteString(content); err != nil {
+		t.Fatalf("Failed to write to temp file: %v", err)
+	}
+	if err := tmpFile.Close(); err != nil {
+		t.Fatalf("Failed to close temp file: %v", err)
+	}
+
+	// Call Load with the directory path
+	result, err := Load(true, tmpDir+"/")
+	if err != nil {
+		t.Errorf("Expected no error, got %v", err)
 	}
 
 	expected := Vault{
-		"hello": "world",
+		"KEY1": "value1",
+		"KEY2": "value2",
 	}
 
 	for key, expectedValue := range expected {
@@ -137,5 +170,39 @@ func TestLoad(t *testing.T) {
 			t.Errorf("Expected vault[%q] = %q, but got %q", key, expectedValue, value)
 		}
 	}
+}
 
+func TestSaveFileContentToEnvironment(t *testing.T) {
+	lines := []string{"KEY1=value1", "KEY2=value2"}
+
+	saveFileContentToEnviroment(lines)
+
+	if os.Getenv("KEY1") != "value1" {
+		t.Errorf("Expected KEY1 to be 'value1', got %q", os.Getenv("KEY1"))
+	}
+	if os.Getenv("KEY2") != "value2" {
+		t.Errorf("Expected KEY2 to be 'value2', got %q", os.Getenv("KEY2"))
+	}
+}
+
+func TestParseKeyValue(t *testing.T) {
+	tests := []struct {
+		line     string
+		key      string
+		value    string
+		expected bool
+	}{
+		{"KEY=value", "KEY", "value", true},
+		{"KEY = value ", "KEY", "value", true},
+		{"KEY", "", "", false},
+		{"KEY=value#comment", "KEY", "value", true},
+	}
+
+	for _, tt := range tests {
+		key, value, exists := parseKeyValue(tt.line)
+		if exists != tt.expected || key != tt.key || value != tt.value {
+			t.Errorf("parseKeyValue(%q) = %q, %q, %v; want %q, %q, %v",
+				tt.line, key, value, exists, tt.key, tt.value, tt.expected)
+		}
+	}
 }

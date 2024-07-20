@@ -16,8 +16,10 @@ func Load(returnMap bool, params ...string) (Vault, error) {
 		return vault, err
 	}
 
+	lines := normalizeLineEndings(content)
+	saveFileContentToEnviroment(lines)
 	if returnMap {
-		vault.parseFileContentToMap(content)
+		vault.parseFileContentToMap(lines)
 	}
 
 	return vault, nil
@@ -46,23 +48,43 @@ func fetchFile(filePath string) ([]byte, error) {
 	return content, nil
 }
 
-func (v Vault) parseFileContentToMap(content []byte) {
-	normalizedContent := normalizeLineEndings(content)
-	lines := strings.Split(normalizedContent, "\n")
+func (v Vault) parseFileContentToMap(lines []string) {
 	for _, line := range lines {
-		lineNoComments := strings.SplitN(line, "#", 2)
-		parts := strings.SplitN(lineNoComments[0], "=", 2)
-		if len(parts) == 2 {
-			key := strings.TrimSpace(parts[0])
-			value := strings.TrimSpace(parts[1])
+		key, value, exists := parseKeyValue(line)
+		if exists {
 			v[key] = value
+		}
+	}
+}
+
+func saveFileContentToEnviroment(lines []string) {
+	for _, line := range lines {
+		key, value, exists := parseKeyValue(line)
+		if exists {
+			os.Setenv(key, value)
 		}
 
 	}
 }
 
-func normalizeLineEndings(content []byte) string {
+func parseKeyValue(line string) (key, value string, exists bool) {
+	lineNoComments := strings.SplitN(line, "#", 2)
+	parts := strings.SplitN(lineNoComments[0], "=", 2)
+	if len(parts) == 2 {
+		key := strings.TrimSpace(parts[0])
+		value := strings.TrimSpace(parts[1])
+		return key, value, true
+	}
+
+	return "", "", false
+}
+
+func normalizeLineEndings(content []byte) []string {
 	normalizedContent := strings.ReplaceAll(string(content), "\r\n", "\n")
 	normalizedContent = strings.ReplaceAll(normalizedContent, "\r", "\n")
-	return normalizedContent
+	lines := strings.Split(normalizedContent, "\n")
+	if len(lines) > 0 && lines[len(lines)-1] == "" {
+		lines = lines[:len(lines)-1]
+	}
+	return lines
 }
