@@ -1,5 +1,17 @@
 # godotenv
 
+## Testing
+
+[![Coverage Status](https://coveralls.io/repos/github/StevenDStanton/dotenvgo/badge.svg?branch=master)](https://coveralls.io/github/StevenDStanton/dotenvgo?branch=master)
+
+### Normal Tests
+
+`go test`
+
+### Fuzzing Tests
+
+`go test -fuzz=Fuzz -fuzztime=30s`
+
 ## Why
 
 There are already several godotenv packages out there, why write my own?
@@ -8,6 +20,8 @@ I hate external dependancies. Especially for something as trivial as this. It is
 as left-pad over in the npm ecosystem. Part of why I love go is that the standard library is
 powerful enough I can write nearly anything I want on my own without relying on external
 resources.
+
+I also wanted one using a map and not actual enviromental variables.
 
 ## How
 
@@ -37,13 +51,3 @@ However, I would encourage you to go write your own, its really easy!
 - [ ] Multiline values must use double quotes
 - [ ] Ignore any line without a `=`
 - [ ] Ensure UTF8 encoding
-
-## Testing
-
-### Normal Tests
-
-`go test`
-
-### Fuzzing Tests
-
-`go test -fuzz=Fuzz -fuzztime=30s`

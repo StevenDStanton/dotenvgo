@@ -120,3 +120,22 @@ func TestParseFileContentToMap(t *testing.T) {
 		}
 	}
 }
+
+func TestLoad(t *testing.T) {
+	result, err := Load("test/")
+
+	if err != nil {
+		t.Error("Unable to Load File")
+	}
+
+	expected := Vault{
+		"hello": "world",
+	}
+
+	for key, expectedValue := range expected {
+		if value, exists := result[key]; !exists || value != expectedValue {
+			t.Errorf("Expected vault[%q] = %q, but got %q", key, expectedValue, value)
+		}
+	}
+
+}
