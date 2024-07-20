@@ -43,11 +43,10 @@ However, I would encourage you to go write your own, its really easy!
 - [x] Ignore blank lines
 - [x] Parse key-value pairs deliminated by `=`
 - [x] Trim any whitespace around the `=`
-- [ ] Values can be quoted or unquoted
-- [ ] Unquoted lines end at line break
+- [x] Values can be quoted or unquoted
+- [x] Unquoted lines end at line break
 - [ ] Special characters must be surrounded by quotes
 - [ ] Multiline values must use double quotes
 - [x] Ignore any line without a `=`
-- [ ] Ensure UTF8 encoding
 - [x] Return Value as a Map
-- [ ] Save to os.Getenv
+- [x] Save to os.Getenv

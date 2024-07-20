@@ -172,6 +172,15 @@ func TestLoad(t *testing.T) {
 	}
 }
 
+func TestLoadNoFile(t *testing.T) {
+	// Call Load with the directory path
+	_, err := Load(true, "")
+	if err == nil {
+		t.Errorf("Expected no error, got %v", err)
+	}
+
+}
+
 func TestSaveFileContentToEnvironment(t *testing.T) {
 	lines := []string{"KEY1=value1", "KEY2=value2"}
 
