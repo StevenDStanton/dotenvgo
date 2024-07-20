@@ -155,7 +155,7 @@ func TestLoad(t *testing.T) {
 	}
 
 	// Call Load with the directory path
-	result, err := Load(true, tmpDir+"/")
+	result, err := Load(2, tmpDir+"/")
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
 	}
@@ -174,7 +174,7 @@ func TestLoad(t *testing.T) {
 
 func TestLoadNoFile(t *testing.T) {
 	// Call Load with the directory path
-	_, err := Load(true, "")
+	_, err := Load(2)
 	if err == nil {
 		t.Errorf("Expected no error, got %v", err)
 	}

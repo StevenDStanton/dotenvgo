@@ -12,6 +12,20 @@
 
 `go test -fuzz=Fuzz -fuzztime=30s`
 
+## Usage
+
+Default `.env` current directory returning a map and setting the enviromental variables
+
+```go
+variables, err := dotenvgo.Load(dotenvgo.Both)
+```
+
+`.env` in `test/` sub directory and setting only the enviromental variables
+
+```go
+_, err := dotenvgo.Load(dotenvgo.Enviroment, "test/")
+```
+
 ## Why
 
 There are already several godotenv packages out there, why write my own?

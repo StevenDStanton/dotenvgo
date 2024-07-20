@@ -7,8 +7,15 @@ import (
 )
 
 type Vault map[string]string
+type ReturnType int
 
-func Load(returnMap bool, params ...string) (Vault, error) {
+const (
+	Enviroment ReturnType = iota
+	Map
+	Both
+)
+
+func Load(returnType ReturnType, params ...string) (Vault, error) {
 	vault := make(Vault)
 	filePath := parseFileLocation(params...)
 	content, err := fetchFile(filePath)
@@ -17,8 +24,11 @@ func Load(returnMap bool, params ...string) (Vault, error) {
 	}
 
 	lines := normalizeLineEndings(content)
-	saveFileContentToEnviroment(lines)
-	if returnMap {
+	if returnType == Enviroment || returnType == Both {
+		saveFileContentToEnviroment(lines)
+	}
+
+	if returnType == Map || returnType == Both {
 		vault.parseFileContentToMap(lines)
 	}
 
