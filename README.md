@@ -44,10 +44,10 @@ However, I would encourage you to go write your own, its really easy!
 - [x] Ignore anything after the # character
 - [x] Ignore blank lines
 - [x] Parse key-value pairs deliminated by `=`
-- [ ] Trim any whitespace around the `=`
+- [x] Trim any whitespace around the `=`
 - [ ] Values can be quoted or unquoted
 - [ ] Unquoted lines end at line break
 - [ ] Special characters must be surrounded by quotes
 - [ ] Multiline values must use double quotes
-- [ ] Ignore any line without a `=`
+- [x] Ignore any line without a `=`
 - [ ] Ensure UTF8 encoding
