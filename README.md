@@ -16,16 +16,16 @@
 
 ## Usage
 
-Default `.env` current directory returning a map and setting the enviromental variables
+Default `.env` current directory returning a map and setting the environmental variables
 
 ```go
 variables, err := dotenvgo.Load(dotenvgo.Both)
 ```
 
-`.env` in `test/` sub directory and setting only the enviromental variables
+`.env` in `test/` sub directory and setting only the environmental variables
 
 ```go
-_, err := dotenvgo.Load(dotenvgo.Enviroment, "test/")
+_, err := dotenvgo.Load(dotenvgo.Environment, "test/")
 ```
 
 ## Why

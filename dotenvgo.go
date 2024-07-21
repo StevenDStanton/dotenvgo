@@ -10,7 +10,7 @@ type Vault map[string]string
 type ReturnType int
 
 const (
-	Enviroment ReturnType = iota
+	Environment ReturnType = iota
 	Map
 	Both
 )
@@ -24,8 +24,8 @@ func Load(returnType ReturnType, params ...string) (Vault, error) {
 	}
 
 	lines := normalizeLineEndings(content)
-	if returnType == Enviroment || returnType == Both {
-		saveFileContentToEnviroment(lines)
+	if returnType == Environment || returnType == Both {
+		saveFileContentToEnvironment(lines)
 	}
 
 	if returnType == Map || returnType == Both {
@@ -67,7 +67,7 @@ func (v Vault) parseFileContentToMap(lines []string) {
 	}
 }
 
-func saveFileContentToEnviroment(lines []string) {
+func saveFileContentToEnvironment(lines []string) {
 	for _, line := range lines {
 		key, value, exists := parseKeyValue(line)
 		if exists {

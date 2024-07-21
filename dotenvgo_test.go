@@ -184,7 +184,7 @@ func TestLoadNoFile(t *testing.T) {
 func TestSaveFileContentToEnvironment(t *testing.T) {
 	lines := []string{"KEY1=value1", "KEY2=value2"}
 
-	saveFileContentToEnviroment(lines)
+	saveFileContentToEnvironment(lines)
 
 	if os.Getenv("KEY1") != "value1" {
 		t.Errorf("Expected KEY1 to be 'value1', got %q", os.Getenv("KEY1"))
