@@ -3,6 +3,7 @@
 ## Testing
 
 [![Coverage Status](https://coveralls.io/repos/github/StevenDStanton/dotenvgo/badge.svg?branch=master)](https://coveralls.io/github/StevenDStanton/dotenvgo?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/StevenDStanton/dotenvgo)](https://goreportcard.com/report/github.com/StevenDStanton/dotenvgo)
 ![MIT LICENSE](https://camo.githubusercontent.com/2bb6ac78e5a9f4f688a6a066cc71b62012101802fcdb478e6e4c6b6ec75dc694/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d626c75652e737667)
 
 ### Normal Tests
